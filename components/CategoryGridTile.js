@@ -28,25 +28,31 @@ const CategoryGridTile = (props) => {
 
 export default CategoryGridTile;
 
+let gridItemOverflow = 'visible';
+if (Platform.OS === 'android' && Platform.Version >= 21) {
+  gridItemOverflow = 'hidden';
+}
+
 const styles = StyleSheet.create({
   gridItem: {
     flex: 1,
     margin: 15,
     height: 150,
     borderRadius: 10,
-    overflow: 'hidden',
+    elevation: 5, // for android
+    overflow: gridItemOverflow,
   },
   container: {
     flex: 1,
     // borderWidth: 1,
     borderRadius: 10,
-    shadowOpacity: 0.26,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 10,
-    elevation: 3, // for android
     padding: 10,
     justifyContent: 'flex-end',
     alignItems: 'flex-end',
+    shadowColor: 'black',
+    shadowOpacity: 0.26,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 10,
   },
   title: {
     fontFamily: 'open-sans-bold',

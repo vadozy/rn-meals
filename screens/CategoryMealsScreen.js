@@ -1,28 +1,42 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, View, Text, FlatList } from 'react-native';
 
-import { CATEGORIES } from '../data/dummy-data';
+import { CATEGORIES, MEALS } from '../data/dummy-data';
+import MealItem from '../components/MealItem';
 
 const CategoryMealsScreen = (props) => {
+  const renderMealItem = ({ item }) => {
+    return (
+      <MealItem
+        title={item.title}
+        image={item.imageUrl}
+        duration={item.duration}
+        complexity={item.complexity}
+        affordability={item.affordability}
+        onSelectMeal={() =>
+          props.navigation.navigate({
+            routeName: 'MealDetail',
+            params: {
+              mealId: item.id,
+            },
+          })
+        }
+      />
+    );
+  };
+
   const categoryId = props.navigation.getParam('categoryId');
-  const selectedCategory = CATEGORIES.find((cat) => cat.id === categoryId);
+
+  const displayedMeals = MEALS.filter((m) =>
+    m.categoryIds.includes(categoryId)
+  );
 
   return (
     <View style={styles.screen}>
-      <Text>The Category Meal Screen!</Text>
-      <Text>{selectedCategory.title}</Text>
-      <Button
-        title="Go to Meal Details!"
-        onPress={() => {
-          props.navigation.navigate('MealDetail');
-        }}
-      />
-      <Button
-        title="Go Back!"
-        onPress={() => {
-          // props.navigation.goBack();
-          props.navigation.pop();
-        }}
+      <FlatList
+        data={displayedMeals}
+        renderItem={renderMealItem}
+        numColumns={1}
       />
     </View>
   );
